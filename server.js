@@ -31,21 +31,26 @@ const bot = setupBot(process.env.BOT_TOKEN);
 app.use(createWebhookRouter(bot, process.env.BOT_TOKEN));
 app.use('/api/ideas', apiRouter);
 
-// Start Server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, async () => {
-    console.log(`Server running on port ${PORT}`);
+// Start Server locally (skipped when running on Vercel serverless environment)
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, async () => {
+        console.log(`Server running on port ${PORT}`);
 
-    if (process.env.WEBHOOK_URL && !process.env.WEBHOOK_URL.includes('localhost')) {
-        // Only register webhook automatically if using a public HTTPS tunnel/URL
-        const webhookPath = `${process.env.WEBHOOK_URL}/webhook/${process.env.BOT_TOKEN}`;
-        try {
-            await bot.telegram.setWebhook(webhookPath);
-            console.log(`Telegram webhook registered at: ${webhookPath}`);
-        } catch (err) {
-            console.error('Failed to set webhook:', err.message);
+        if (process.env.WEBHOOK_URL && !process.env.WEBHOOK_URL.includes('localhost')) {
+            // Only register webhook automatically if using a public HTTPS tunnel/URL
+            const webhookPath = `${process.env.WEBHOOK_URL}/webhook/${process.env.BOT_TOKEN}`;
+            try {
+                await bot.telegram.setWebhook(webhookPath);
+                console.log(`Telegram webhook registered at: ${webhookPath}`);
+            } catch (err) {
+                console.error('Failed to set webhook:', err.message);
+            }
+        } else {
+            console.log('Running locally. Skipping automatic webhook registration until public HTTPS URL is provided.');
         }
-    } else {
-        console.log('Running locally. Skipping automatic webhook registration until public HTTPS URL is provided.');
-    }
-});
+    });
+}
+
+// Export app for Vercel serverless execution
+export default app;
