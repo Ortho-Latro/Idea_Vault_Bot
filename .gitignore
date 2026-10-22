@@ -1,0 +1,13 @@
+# Dependecies
+node_modules/
+
+# Local Environment Variables (Secretes)
+.env 
+
+# Video & Local storage files
+uploads/*
+!uploads/.gitkeep
+
+# Operating System Files
+.DS_Store
+Thumbs.db
