@@ -23,7 +23,7 @@ const IdeaSchema = new mongoose.Schema({
     },
     extractedText: {
         type: String,
-        defauly: ''
+        default: ''
     },
     video: {
         fileId: { type: String },

@@ -57,7 +57,9 @@ export default function setupBot(token) {
                 return ctx.reply('⚠️ Please provide a name to search. Example: `/search Neural Task Router`', { parse_mode: 'Markdown' });
             }
 
-            const idea = await Idea.findOne({ name: { $regex: new RegExp(`^${searchName}$`, 'i') } });
+            const idea = await Idea.findOne({ 
+                telegramId: { $in: ALLOWED_USERS },
+                name: { $regex: new RegExp(`^${searchName}$`, 'i') } });
 
             if (!idea) {
                 return ctx.reply(`❌ No idea found with the name "${searchName}".`);
