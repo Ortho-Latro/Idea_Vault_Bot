@@ -4,13 +4,11 @@ const IdeaSchema = new mongoose.Schema({
     IdeaId: {
         type: String,
         required: true,
-        unique: true,
-        index: true
+        unique: true
     },
     telegramId: {
         type: String,
-        required: true,
-        index: true
+        required: true
     },
     name: {
         type: String,
@@ -34,5 +32,6 @@ const IdeaSchema = new mongoose.Schema({
 }, {timestamps: true });
 
 IdeaSchema.index({ telegramId: 1, name: 1 }, {unique: true});
+IdeaSchema.index({ telegramId: 1, createdAt: -1 });
 
 export default mongoose.model('Idea', IdeaSchema);
