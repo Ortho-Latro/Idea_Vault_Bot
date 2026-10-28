@@ -21,8 +21,13 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch((err) => console.error('MongoDB connection error:', err));
+    .then(() => {
+        console.log('✅ Connected to MongoDB');
+    })
+    .catch((err) => {
+        console.error('❌ MongoDB connection failed:', err.name);
+        console.error('Reason:', err.message);
+    });
 
 // Initialize Bot
 const bot = setupBot(process.env.BOT_TOKEN);
